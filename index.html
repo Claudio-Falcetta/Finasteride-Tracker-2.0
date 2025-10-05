@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi Finastéride</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .legend {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .legend h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .topique-box {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .oral-box {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .mixte-box {
+            background: linear-gradient(135deg, #4CAF50 50%, #2196F3 50%);
+            color: white;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .warning-box p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .level-card {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .level-card.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .level-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .level-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .level-title {
+            flex: 1;
+        }
+        
+        .level-title h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .level-subtitle {
+            font-size: 14px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .day {
+            text-align: center;
+            padding: 12px 5px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .day-name {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        .day-dose {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .topique {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .oral {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .repos {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .tracking-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        
+        .tracking-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: start;
+        }
+        
+        .tracking-label {
+            font-weight: 600;
+            color: #667eea;
+            padding-top: 5px;
+            font-size: 14px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .notes-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .es-protocol {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            margin-top: 15px;
+        }
+        
+        .es-protocol h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .es-steps {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .es-step {
+            flex: 1;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #ffb74d;
+        }
+        
+        .es-step input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .es-step label {
+            font-size: 13px;
+            line-height: 1.4;
+            display: flex;
+            align-items: start;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 10%;
+            transition: width 0.3s;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f4ff;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Fiche de Suivi Finastéride</h1>
+        <p class="subtitle">Protocole de Montée Progressive | Durée: 2 semaines par palier (sans effets secondaires)</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div class="legend">
+            <h3>🔑 Légende</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="legend-item">
+                    <div class="legend-box topique-box">T</div>
+                    <span>Topique (application)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box oral-box">O</div>
+                    <span>Oral (pilule)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box mixte-box">M</div>
+                    <span>Phase mixte (topique + oral)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: #f5f5f5; color: #999;">-</div>
+                    <span>Repos (aucune prise)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            <h3>⚠️ Protocole en cas d'Effets Secondaires</h3>
+            <p><strong>Étape 1:</strong> Rester au palier actuel pendant 4 semaines supplémentaires</p>
+            <p><strong>Étape 2:</strong> Si ES estompés → Passer au palier suivant | Si ES persistent → Redescendre d'un palier</p>
+        </div>
+
+        <!-- PALIER 1 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">1</div>
+                <div class="level-title">
+                    <h2>0.25mg Topique</h2>
+                    <span class="level-subtitle">Phase d'initiation douce</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day topique">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">0.25mg</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p1s1">
+                            <label for="p1s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p1s2">
+                            <label for="p1s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier suivant | ES persistent: impossible de descendre (palier 1)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 2 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">2</div>
+                <div class="level-title">
+                    <h2>0.5mg Topique</h2>
+                    <span class="level-subtitle">Augmentation progressive</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day topique">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">0.5mg</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p2s1">
+                            <label for="p2s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p2s2">
+                            <label for="p2s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 3 | ES persistent: retour palier 1</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 3 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">3</div>
+                <div class="level-title">
+                    <h2>0.75mg Topique</h2>
+                    <span class="level-subtitle">Montée en puissance</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day topique">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">0.75mg</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p3s1">
+                            <label for="p3s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p3s2">
+                            <label for="p3s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 4 | ES persistent: retour palier 2</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 4 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">4</div>
+                <div class="level-title">
+                    <h2>1mg Topique</h2>
+                    <span class="level-subtitle">Dose topique maximale</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day topique">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p4s1">
+                            <label for="p4s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p4s2">
+                            <label for="p4s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 5 | ES persistent: retour palier 3</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 5 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">5</div>
+                <div class="level-title">
+                    <h2>Transition Topique + Oral (0.25mg)</h2>
+                    <span class="level-subtitle">Introduction de l'oral à faible dose</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.25mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.25mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p6s1">
+                            <label for="p6s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p6s2">
+                            <label for="p6s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 7 | ES persistent: retour palier 5</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 7 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">7</div>
+                <div class="level-title">
+                    <h2>Plus d'Oral que de Topique (0.5mg)</h2>
+                    <span class="level-subtitle">Bascule vers l'oral majoritaire</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p7s1">
+                            <label for="p7s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p7s2">
+                            <label for="p7s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 8 | ES persistent: retour palier 6</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 8 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">8</div>
+                <div class="level-title">
+                    <h2>Oral Renforcé (0.75mg)</h2>
+                    <span class="level-subtitle">Augmentation de la dose orale</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p8s1">
+                            <label for="p8s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p8s2">
+                            <label for="p8s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 9 | ES persistent: retour palier 7</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 9 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">9</div>
+                <div class="level-title">
+                    <h2>Quasi 100% Oral (0.75mg)</h2>
+                    <span class="level-subtitle">Dernière étape avant la dose finale</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.75mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p9s1">
+                            <label for="p9s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p9s2">
+                            <label for="p9s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 10 | ES persistent: retour palier 8</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 10 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">10</div>
+                <div class="level-title">
+                    <h2>🎯 1mg Oral Quotidien</h2>
+                    <span class="level-subtitle">Dose d'entretien finale - Félicitations!</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg O</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p10s1">
+                            <label for="p10s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p10s2">
+                            <label for="p10s2">Semaine 2</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p10s3">
+                            <label for="p10s3">Semaine 3</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p10s4">
+                            <label for="p10s4">Semaine 4</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: maintenir 1mg/jour | ES persistent: retour palier 9</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer la Fiche</button>
+            <button class="btn btn-secondary" onclick="resetAll()">🔄 Réinitialiser</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleCard(card) {
+            card.classList.toggle('active');
+        }
+        
+        function resetAll() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes les données ?')) {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+                document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+            }
+        }
+        
+        // Update progress bar based on checked weeks
+        function updateProgress() {
+            const totalWeeks = document.querySelectorAll('input[type="checkbox"][id^="p"]').length;
+            const checkedWeeks = document.querySelectorAll('input[type="checkbox"][id^="p"]:checked').length;
+            const progress = (checkedWeeks / totalWeeks) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', updateProgress);
+        });
+        
+        // Auto-save to localStorage
+        function saveData() {
+            const data = {
+                checkboxes: {},
+                textareas: {}
+            };
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                if (cb.id) data.checkboxes[cb.id] = cb.checked;
+            });
+            
+            document.querySelectorAll('textarea').forEach((ta, index) => {
+                data.textareas[index] = ta.value;
+            });
+            
+            localStorage.setItem('finasterideTracking', JSON.stringify(data));
+        }
+        
+        function loadData() {
+            const saved = localStorage.getItem('finasterideTracking');
+            if (saved) {
+                const data = JSON.parse(saved);
+                
+                Object.keys(data.checkboxes).forEach(id => {
+                    const cb = document.getElementById(id);
+                    if (cb) cb.checked = data.checkboxes[id];
+                });
+                
+                document.querySelectorAll('textarea').forEach((ta, index) => {
+                    if (data.textareas[index]) ta.value = data.textareas[index];
+                });
+                
+                updateProgress();
+            }
+        }
+        
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('change', saveData);
+            el.addEventListener('input', saveData);
+        });
+        
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html></span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
+                    <span class="day-dose">0.25mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p5s1">
+                            <label for="p5s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p5s2">
+                            <label for="p5s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 6 | ES persistent: retour palier 4</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 6 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">6</div>
+                <div class="level-title">
+                    <h2>Topique + Oral (0.5mg)</h2>
+                    <span class="level-subtitle">Augmentation de l'oral</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">1mg T
