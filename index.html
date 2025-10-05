@@ -777,6 +777,87 @@
                 </div>
                 <div class="day oral">
                     <span class="day-name">VEN</span>
+                    <span class="day-dose">0.25mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">SAM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">DIM</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+            </div>
+            
+            <div class="tracking-section">
+                <div class="tracking-row">
+                    <div class="tracking-label">📅 Semaines:</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p5s1">
+                            <label for="p5s1">Semaine 1</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="p5s2">
+                            <label for="p5s2">Semaine 2</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-row">
+                    <div class="tracking-label">📝 Notes:</div>
+                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
+                </div>
+            </div>
+            
+            <div class="es-protocol">
+                <h4>🚨 En cas d'Effets Secondaires:</h4>
+                <div class="es-steps">
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ Rester 4 semaines de plus à ce palier</span>
+                        </label>
+                    </div>
+                    <div class="es-step">
+                        <label>
+                            <input type="checkbox">
+                            <span>✓ ES estompés: palier 6 | ES persistent: retour palier 4</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PALIER 6 -->
+        <div class="level-card" onclick="toggleCard(this)">
+            <div class="level-header">
+                <div class="level-number">6</div>
+                <div class="level-title">
+                    <h2>Topique + Oral (0.5mg)</h2>
+                    <span class="level-subtitle">Augmentation de l'oral</span>
+                </div>
+            </div>
+            
+            <div class="schedule">
+                <div class="day oral">
+                    <span class="day-name">LUN</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">MAR</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">MER</span>
+                    <span class="day-dose">0.5mg O</span>
+                </div>
+                <div class="day topique">
+                    <span class="day-name">JEU</span>
+                    <span class="day-dose">1mg T</span>
+                </div>
+                <div class="day oral">
+                    <span class="day-name">VEN</span>
                     <span class="day-dose">0.5mg O</span>
                 </div>
                 <div class="day topique">
@@ -1177,10 +1258,11 @@
                 document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
                 document.querySelectorAll('textarea').forEach(ta => ta.value = '');
                 document.querySelectorAll('.level-card').forEach(card => card.classList.remove('active'));
+                localStorage.removeItem('finasterideTracking');
+                updateProgress();
             }
         }
         
-        // Update progress bar based on checked weeks
         function updateProgress() {
             const totalWeeks = document.querySelectorAll('input[type="checkbox"][id^="p"]').length;
             const checkedWeeks = document.querySelectorAll('input[type="checkbox"][id^="p"]:checked').length;
@@ -1192,7 +1274,6 @@
             cb.addEventListener('change', updateProgress);
         });
         
-        // Auto-save to localStorage
         function saveData() {
             const data = {
                 checkboxes: {},
@@ -1236,85 +1317,4 @@
         window.addEventListener('load', loadData);
     </script>
 </body>
-</html></span>
-                </div>
-                <div class="day oral">
-                    <span class="day-name">VEN</span>
-                    <span class="day-dose">0.25mg O</span>
-                </div>
-                <div class="day topique">
-                    <span class="day-name">SAM</span>
-                    <span class="day-dose">1mg T</span>
-                </div>
-                <div class="day topique">
-                    <span class="day-name">DIM</span>
-                    <span class="day-dose">1mg T</span>
-                </div>
-            </div>
-            
-            <div class="tracking-section">
-                <div class="tracking-row">
-                    <div class="tracking-label">📅 Semaines:</div>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="p5s1">
-                            <label for="p5s1">Semaine 1</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="p5s2">
-                            <label for="p5s2">Semaine 2</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tracking-row">
-                    <div class="tracking-label">📝 Notes:</div>
-                    <textarea class="notes-area" placeholder="Notez vos observations, ressentis, etc."></textarea>
-                </div>
-            </div>
-            
-            <div class="es-protocol">
-                <h4>🚨 En cas d'Effets Secondaires:</h4>
-                <div class="es-steps">
-                    <div class="es-step">
-                        <label>
-                            <input type="checkbox">
-                            <span>✓ Rester 4 semaines de plus à ce palier</span>
-                        </label>
-                    </div>
-                    <div class="es-step">
-                        <label>
-                            <input type="checkbox">
-                            <span>✓ ES estompés: palier 6 | ES persistent: retour palier 4</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PALIER 6 -->
-        <div class="level-card" onclick="toggleCard(this)">
-            <div class="level-header">
-                <div class="level-number">6</div>
-                <div class="level-title">
-                    <h2>Topique + Oral (0.5mg)</h2>
-                    <span class="level-subtitle">Augmentation de l'oral</span>
-                </div>
-            </div>
-            
-            <div class="schedule">
-                <div class="day oral">
-                    <span class="day-name">LUN</span>
-                    <span class="day-dose">0.5mg O</span>
-                </div>
-                <div class="day topique">
-                    <span class="day-name">MAR</span>
-                    <span class="day-dose">1mg T</span>
-                </div>
-                <div class="day oral">
-                    <span class="day-name">MER</span>
-                    <span class="day-dose">0.5mg O</span>
-                </div>
-                <div class="day topique">
-                    <span class="day-name">JEU</span>
-                    <span class="day-dose">1mg T
+</html>
